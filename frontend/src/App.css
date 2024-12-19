@@ -44,7 +44,7 @@
 
 /* When the card flips */
 .card.flip .card-inner {
-  transform: rotateY(180deg); /* Flip on the Y-axis */
+  transform: rotateY(90deg); /* Flip on the Y-axis */
 }
 
 /* Front face of the card */
@@ -60,5 +60,5 @@
 
 /* Back face of the card (flipped 180 degrees) */
 .card-back {
-  transform: rotateY(180deg);
+  transform: rotateY(90deg);
 }
