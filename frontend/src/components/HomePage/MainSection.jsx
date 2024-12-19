@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ItemCard from './ItemCard';
 
-// Define all menu items outside of the component
 const menuItems = {
   Burger: [
     { image: './various-items/Burger.png', title: 'Margreta', price: 300 },
@@ -36,20 +35,45 @@ const menuItems = {
 };
 
 function MainSection({ menu }) {
-  // Get the items for the selected menu, or default to an empty array if no match is found
-  const selectedMenuItems = menuItems[menu] || [];
+  const [selectedMenuItems, setSelectedMenuItems] = useState(menuItems[menu] || []);
+  const [flip, setFlip] = useState(false);
+
+  useEffect(() => {
+    // Trigger flip animation when menu changes
+    setFlip(true);
+
+    const timer = setTimeout(() => {
+      setSelectedMenuItems(menuItems[menu] || []); // Update content after flip
+      setFlip(false); // Reset flip animation
+    }, 600); // Duration of flip animation
+
+    return () => clearTimeout(timer); // Clean up timer
+  }, [menu]);
 
   return (
     <div className="pl-80 py-10 pr-10">
-      <div className="border h-[85vh] p-10 flex space-x-28">
-        {/* Render the items based on the selected menu */}
-        {selectedMenuItems.length > 0 ? (
-          selectedMenuItems.map((item, index) => (
-            <ItemCard key={index} image={item.image} title={item.title} price={item.price} />
-          ))
-        ) : (
-          <div>No items available for this menu.</div>
-        )}
+      <div className="border h-[85vh] p-10">
+        <div className="card-wrapper">
+          {selectedMenuItems.length > 0 ? (
+            selectedMenuItems.map((item, index) => (
+              <div className={`card ${flip ? 'flip' : ''}`} key={index}>
+                <div className="card-inner">
+                  {/* Front side of the card */}
+                  <div className="card-front">
+                    <ItemCard image={item.image} title={item.title} price={item.price} />
+                  </div>
+
+                  {/* Back side of the card with new items */}
+                  <div className="card-back">
+                    <ItemCard image={item.image} title={`${item.title} - Back`} price={item.price} />
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div>No items available for this menu.</div>
+          )}
+        </div>
       </div>
     </div>
   );
