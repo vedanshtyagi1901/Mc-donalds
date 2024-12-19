@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import ItemCard from './ItemCard';
 
 function MainSection({ menu }) {
+
+  
+  
+
   // Declare all state variables first
   const [Burger1, setBurger1] = useState(0);
   const [Burger2, setBurger2] = useState(0);
@@ -68,21 +72,32 @@ function MainSection({ menu }) {
   useEffect(() => {
     // Trigger flip animation when menu changes
     setFlip(true);
-
-    const timer = setTimeout(() => {
+  
+    // First call to update selectedMenuItems after 600ms (flip animation time)
+    const timer1 = setTimeout(() => {
       setSelectedMenuItems(menuItems[menu] || []); // Update content after flip
+    }, 400); // Duration of flip animation (same as CSS transition)
+  
+    // Second call to reset flip state after 1200ms (2nd call delay)
+    const timer2 = setTimeout(() => {
       setFlip(false); // Reset flip animation
-    }, 600); // Duration of flip animation
-
-    return () => clearTimeout(timer); // Clean up timer
+      setSelectedMenuItems(menuItems[menu] || []); // Update content again if needed
+    }, 800); // Delay for the second update
+  
+    // Clean up timers
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+    };
   }, [menu]);
+  
 
   // useEffect to force re-render when item count changes
   useEffect(() => {
     // This effect runs when any of the item counts change
     // It will trigger a re-render of the component
-    console.log(Burger1);
     console.log("Item count changed, forcing re-render");
+    console.log(Burger1);
   }, [
     Burger1, Burger2, Burger3, Burger4,
     Dessert1, Dessert2, Dessert3, Dessert4,
