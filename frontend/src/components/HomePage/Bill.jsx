@@ -1,12 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import html2canvas from 'html2canvas';
 
 function Bill({ bill, handleViewBill, showBillModal, handleCloseModal }) {
+  const [mobileNumber, setMobileNumber] = useState('');
+  const [seatNumber, setSeatNumber] = useState('');
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+
+  const handleFormSubmit = () => {
+    if (!mobileNumber || !seatNumber) {
+      alert('Please enter both mobile number and seat number.');
+      return;
+    }
+    setIsFormSubmitted(true); // Show the bill details after form submission
+  };
+
   const handlePrint = () => {
     // Get the modal content and the buttons
-    const billModal = document.getElementById("billModal");
-    const closeButton = document.getElementById("closeButton");
-    const printButton = document.getElementById("printButton");
+    const billModal = document.getElementById('billModal');
+    const closeButton = document.getElementById('closeButton');
+    const printButton = document.getElementById('printButton');
 
     // Temporarily hide the close and print buttons
     closeButton.style.display = 'none';
@@ -21,11 +33,15 @@ function Bill({ bill, handleViewBill, showBillModal, handleCloseModal }) {
       }
 
       // Create an image from the canvas
-      const imgData = canvas.toDataURL("image/png");
+      const imgData = canvas.toDataURL('image/png');
 
       // Create a temporary window for printing
       const printWindow = window.open('', '', 'height=600,width=800');
-      printWindow.document.write('<html><body><img src="' + imgData + '" style="width: 100%; height: auto;"/></body></html>');
+      printWindow.document.write(
+        '<html><body><img src="' +
+          imgData +
+          '" style="width: 100%; height: auto;"/></body></html>'
+      );
       printWindow.document.close();
 
       // Wait a short delay to ensure image rendering before printing
@@ -65,34 +81,72 @@ function Bill({ bill, handleViewBill, showBillModal, handleCloseModal }) {
             id="billModal" // Add id for html2canvas targeting
             className="bg-white p-6 rounded-lg shadow-lg w-96 transform scale-95 transition-all duration-500 ease-in-out opacity-100 animate-modal-in"
           >
-            <h2 className="text-xl font-semibold mb-4 text-center">Your Bill</h2>
-            <ul className="space-y-2">
-              {bill.items.map((item, index) => (
-                <li key={index} className="flex justify-between text-sm">
-                  <span>{item.title} (x{item.quantity})</span>
-                  <span>₹{item.total}</span>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-4 font-semibold text-right">
-              Total Amount: ₹{bill.totalAmount}
-            </div>
-            <div className="mt-4 text-right flex justify-between">
-              <button
-                id="closeButton" // Add an id for hiding the button during print
-                onClick={handleCloseModal}
-                className="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700"
-              >
-                Close
-              </button>
-              <button
-                id="printButton" // Add an id for hiding the button during print
-                onClick={handlePrint} // Trigger print
-                className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700"
-              >
-                Print Bill
-              </button>
-            </div>
+            {/* First ask for the mobile number and seat number */}
+            {!isFormSubmitted ? (
+              <div className="bg-yellow-400 p-6 rounded-lg shadow-lg">
+                <h2 className="text-xl font-semibold mb-4 text-center text-red-600">Enter Your Details</h2>
+                <div className="mb-4">
+                  <label htmlFor="mobileNumber" className="block text-sm font-semibold text-red-600">Mobile Number:</label>
+                  <input
+                    id="mobileNumber"
+                    type="text"
+                    value={mobileNumber}
+                    onChange={(e) => setMobileNumber(e.target.value)}
+                    placeholder="Enter mobile number"
+                    className="w-full p-2 border border-gray-300 rounded mt-2"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="seatNumber" className="block text-sm font-semibold text-red-600">Seat Number:</label>
+                  <input
+                    id="seatNumber"
+                    type="text"
+                    value={seatNumber}
+                    onChange={(e) => setSeatNumber(e.target.value)}
+                    placeholder="Enter seat number"
+                    className="w-full p-2 border border-gray-300 rounded mt-2"
+                  />
+                </div>
+                <button
+                  onClick={handleFormSubmit}
+                  className="w-full py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                >
+                  Submit
+                </button>
+              </div>
+            ) : (
+              // Once form is submitted, show the bill details
+              <div className="bg-yellow-400 p-6 rounded-lg shadow-lg">
+                <h2 className="text-xl font-semibold mb-4 text-center text-red-600">Your Bill</h2>
+                <ul className="space-y-2">
+                  {bill.items.map((item, index) => (
+                    <li key={index} className="flex justify-between text-sm">
+                      <span>{item.title} (x{item.quantity})</span>
+                      <span>₹{item.total}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-4 font-semibold text-right text-red-600">
+                  Total Amount: ₹{bill.totalAmount}
+                </div>
+                <div className="mt-4 text-right flex justify-between">
+                  <button
+                    id="closeButton" // Add an id for hiding the button during print
+                    onClick={handleCloseModal}
+                    className="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700"
+                  >
+                    Close
+                  </button>
+                  <button
+                    id="printButton" // Add an id for hiding the button during print
+                    onClick={handlePrint} // Trigger print
+                    className="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700"
+                  >
+                    Print Bill
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
