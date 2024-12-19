@@ -1,0 +1,20 @@
+/* Keyframe animation for sliding in */
+@keyframes slide-in {
+    from {
+      transform: translateX(-100%); /* Start off-screen */
+    }
+    to {
+      transform: translateX(0); /* Slide in to the normal position */
+    }
+  }
+  
+  /* Apply the animation */
+  .sidebar-slide-in {
+    animation: slide-in 0.3s ease-out forwards; /* Adjust the duration to your preference */
+  }
+ 
+
+
+  /* Flip animation */
+
+  
