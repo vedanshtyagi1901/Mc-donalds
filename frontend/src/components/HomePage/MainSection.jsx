@@ -3,30 +3,31 @@ import ItemCard from './ItemCard';
 
 const menuItems = {
   Burger: [
-    { image: './various-items/Burger.png', title: 'Margreta', price: 300 },
-    { image: './various-items/Burger.png', title: 'Cheeseburger', price: 350 },
-    { image: './various-items/Burger.png', title: 'Chicken Burger', price: 400 },
-    { image: './various-items/Burger.png', title: 'Veggie Burger', price: 250 },
+    { image: './various-burgers/burger1.png', title: 'Margreta', price: 300 },
+    { image: './various-burgers/burger2.png', title: 'Cheeseburger', price: 350 },
+    { image: './various-burgers/burger3.png', title: 'Chicken Burger', price: 400 },
+    { image: './various-burgers/burger4.png', title: 'Veggie Burger', price: 250 },
   ],
   Pizza: [
-    { image: './various-items/pizza.png', title: 'Margherita Pizza', price: 500 },
-    { image: './various-items/pizza.png', title: 'Pepperoni Pizza', price: 600 },
-    { image: './various-items/pizza.png', title: 'Veggie Pizza', price: 450 },
-    { image: './various-items/pizza.png', title: 'BBQ Chicken Pizza', price: 550 },
+    { image: './various-pizzas/pizza1.png', title: 'Margherita Pizza', price: 500 },
+    { image: './various-pizzas/pizza2.png', title: 'Pepperoni Pizza', price: 600 },
+    { image: './various-pizzas/pizza3.png', title: 'Veggie Pizza', price: 450 },
+    { image: './various-pizzas/pizza4.png', title: 'BBQ Chicken Pizza', price: 550 },
   ],
   Dessert: [
-    { image: './various-items/dessert.png', title: 'Chocolate Cake', price: 150 },
-    { image: './various-items/dessert.png', title: 'Ice Cream', price: 100 },
-    { image: './various-items/dessert.png', title: 'Fruit Tart', price: 200 },
-    { image: './various-items/dessert.png', title: 'Cheesecake', price: 250 },
+    { image: './various-desserts/chocolate-cake.png', title: 'Chocolate Cake', price: 150 },
+    { image: './various-desserts/ice-cream.png', title: 'Ice Cream', price: 100 },
+    { image: './various-desserts/fruit-chart.png', title: 'Fruit Tart', price: 200 },
+    { image: './various-desserts/cheese-cake.png', title: 'Cheesecake', price: 250 },
   ],
   "Cold Drinks": [
-    { image: './various-items/Cold drinks.png', title: 'Coke', price: 100 },
-    { image: './various-items/Cold drinks.png', title: 'Sprite', price: 100 },
-    { image: './various-items/Cold drinks.png', title: 'Fanta', price: 100 },
-    { image: './various-items/Cold drinks.png', title: 'Pepsi', price: 100 },
+    { image: './various-cold-drinks/Coke.png', title: 'Coke', price: 10 },
+    { image: './various-cold-drinks/Mountain_Dew.png', title: 'Mountain DEW', price: 10 },
+    { image: './various-cold-drinks/Fanta.png', title: 'Fanta', price: 10 },
+    { image: './various-cold-drinks/Pepsi.png', title: 'Pepsi', price: 10 },
   ],
-  "Special Combos": [
+//   insert 's' after 'combo' so that it may work. But right now i have deleted it by intention as this feature is not yet build
+  "Special Combo": [
     { image: './various-items/Special Combo.png', title: 'Combo A', price: 700 },
     { image: './various-items/Special Combo.png', title: 'Combo B', price: 800 },
     { image: './various-items/Special Combo.png', title: 'Combo C', price: 900 },
@@ -52,8 +53,8 @@ function MainSection({ menu }) {
 
   return (
     <div className="pl-80 py-10 pr-10">
-      <div className="border h-[85vh] p-10">
-        <div className="card-wrapper">
+<div className="h-[85vh] p-10">
+<div className="card-wrapper">
           {selectedMenuItems.length > 0 ? (
             selectedMenuItems.map((item, index) => (
               <div className={`card ${flip ? 'flip' : ''}`} key={index}>
