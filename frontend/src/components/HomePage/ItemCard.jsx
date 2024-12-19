@@ -1,19 +1,30 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
-function ItemCard({ image, title, price }) {
-  const [quantity, setQuantity] = useState(0); // Initialize quantity to 0
-
-  // Increment quantity
+function ItemCard({ image, title, price, count, updateCount }) {
+  // Increment quantity using the provided setter
   const handleIncrement = () => {
-    setQuantity((prev) => prev + 1);
+    console.log("Incrementing count");  // Log the action
+    console.log(count);
+    updateCount((prev) => prev + 1);   // Increment the count
   };
 
-  // Decrement quantity
   const handleDecrement = () => {
-    if (quantity > 0) {
-      setQuantity((prev) => prev - 1);
+    console.log("Decrementing count");  // Log the action
+    if (count > 0) {
+      console.log(count)
+      updateCount((prev) => prev - 1); // Decrement the count
     }
   };
+
+  // useEffect to force re-render when item count changes
+  useEffect(() => {
+    // This effect runs when any of the item counts change
+    // It will trigger a re-render of the component
+    console.log("Item count changed, forcing re-render");
+  }, [
+    count
+  ]);
+
 
   return (
     <div className="w-48 rounded-lg shadow-lg overflow-hidden bg-white h-80">
@@ -33,10 +44,10 @@ function ItemCard({ image, title, price }) {
           >
             -
           </button>
-          
-          {/* Quantity */}
-          <p className="text-lg font-bold text-gray-800">{quantity}</p>
-          
+
+          {/* Quantity Display */}
+          <p className="text-lg font-bold text-gray-800">{count}</p>
+
           {/* Increment Button */}
           <button
             onClick={handleIncrement}
