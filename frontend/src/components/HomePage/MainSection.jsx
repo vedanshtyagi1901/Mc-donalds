@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ItemCard from './ItemCard';
+import Bill from './Bill';
 
 function MainSection({ menu }) {
-
-  
-  
-
-  // Declare all state variables first
+  // Declare all state variables for items (this part stays unchanged)
   const [Burger1, setBurger1] = useState(0);
   const [Burger2, setBurger2] = useState(0);
   const [Burger3, setBurger3] = useState(0);
@@ -32,7 +29,6 @@ function MainSection({ menu }) {
   const [SpecialCombo3, setSpecialCombo3] = useState(0);
   const [SpecialCombo4, setSpecialCombo4] = useState(0);
 
-  // Declare the menuItems JSON object with getter and setter
   const menuItems = {
     Burger: [
       { image: './various-burgers/burger1.png', title: 'Margreta', price: 300, getter: Burger1, setter: setBurger1 },
@@ -68,47 +64,53 @@ function MainSection({ menu }) {
 
   const [selectedMenuItems, setSelectedMenuItems] = useState(menuItems[menu] || []);
   const [flip, setFlip] = useState(false);
+  const [bill, setBill] = useState(null);
+  const [showBillModal, setShowBillModal] = useState(false);
+
+  const calculateBill = () => {
+    let totalAmount = 0;
+    const items = [];
+
+    Object.keys(menuItems).forEach(category => {
+      menuItems[category].forEach(item => {
+        const count = item.getter;
+        if (count > 0) {
+          const totalPrice = count * item.price;
+          totalAmount += totalPrice;
+          items.push({ title: item.title, quantity: count, total: totalPrice });
+        }
+      });
+    });
+
+    setBill({ items, totalAmount });
+  };
+
+  const handleViewBill = () => {
+    calculateBill();
+    setShowBillModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowBillModal(false);
+  };
 
   useEffect(() => {
-    // Trigger flip animation when menu changes
     setFlip(true);
-  
-    // First call to update selectedMenuItems after 600ms (flip animation time)
+
     const timer1 = setTimeout(() => {
-      setSelectedMenuItems(menuItems[menu] || []); // Update content after flip
-    }, 400); // Duration of flip animation (same as CSS transition)
-  
-    // Second call to reset flip state after 1200ms (2nd call delay)
+      setSelectedMenuItems(menuItems[menu] || []);
+    }, 400);
+
     const timer2 = setTimeout(() => {
-      setFlip(false); // Reset flip animation
-      setSelectedMenuItems(menuItems[menu] || []); // Update content again if needed
-    }, 800); // Delay for the second update
-  
-    // Clean up timers
+      setFlip(false);
+      setSelectedMenuItems(menuItems[menu] || []);
+    }, 800);
+
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
     };
   }, [menu]);
-  
-
-  // useEffect to force re-render when item count changes
-  useEffect(() => {
-    // This effect runs when any of the item counts change
-    // It will trigger a re-render of the component
-    console.log("Item count changed, forcing re-render");
-    console.log(Burger1);
-  }, [
-    Burger1, Burger2, Burger3, Burger4,
-    Dessert1, Dessert2, Dessert3, Dessert4,
-    Cold_Drink1, Cold_Drink2, Cold_Drink3, Cold_Drink4,
-    Pizza1, Pizza2, Pizza3, Pizza4,
-    SpecialCombo1, SpecialCombo2, SpecialCombo3, SpecialCombo4
-  ]);
-
-  const handleViewBill = () => {
-    alert('View Bill clicked!');
-  };
 
   return (
     <div className="pl-80 py-10 pr-10">
@@ -119,21 +121,21 @@ function MainSection({ menu }) {
               <div className={`card ${flip ? 'flip' : ''}`} key={item.title}>
                 <div className="card-inner">
                   <div className="card-front">
-                    <ItemCard 
-                      image={item.image} 
-                      title={item.title} 
+                    <ItemCard
+                      image={item.image}
+                      title={item.title}
                       price={item.price}
-                      count={item.getter} 
-                      updateCount={item.setter} 
+                      count={item.getter}
+                      updateCount={item.setter}
                     />
                   </div>
                   <div className="card-back">
-                    <ItemCard 
-                      image={item.image} 
-                      title={`${item.title} - Back`} 
-                      price={item.price} 
-                      count={item.getter} 
-                      updateCount={item.setter} 
+                    <ItemCard
+                      image={item.image}
+                      title={`${item.title} - Back`}
+                      price={item.price}
+                      count={item.getter}
+                      updateCount={item.setter}
                     />
                   </div>
                 </div>
@@ -143,14 +145,8 @@ function MainSection({ menu }) {
             <div>No items available for this menu.</div>
           )}
         </div>
-        <div className="flex justify-center mt-24">
-          <button
-            onClick={handleViewBill}
-            className="px-6 py-2 bg-red-600 text-white rounded-lg shadow-md hover:bg-red-700"
-          >
-            View Bill
-          </button>
-        </div>
+
+        <Bill bill={bill} handleViewBill={handleViewBill} showBillModal={showBillModal} handleCloseModal={handleCloseModal}/>
       </div>
     </div>
   );

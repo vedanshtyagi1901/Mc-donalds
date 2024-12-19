@@ -37,7 +37,7 @@ function ItemCard({ image, title, price, count, updateCount }) {
       </div>
       <div className="p-4 text-center">
         <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
-        <p className="text-xl font-bold text-gray-600">${price}</p>
+        <p className="text-xl font-bold text-gray-600">₹{price}</p>
 
         {/* Quantity Section */}
         <div className="flex items-center justify-center mt-4 space-x-4">
