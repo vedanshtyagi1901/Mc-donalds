@@ -41,6 +41,16 @@ function Bill({
     setIsFormSubmitted(true); // Show the bill details after form submission
   };
 
+  const getIndianTime = () => {
+    const utcDate = new Date();
+    const indiaOffset = 5.5 * 60; // IST is UTC+5:30
+    const indiaDate = new Date(utcDate.getTime() + indiaOffset * 60000); // Convert to IST
+
+    const date = indiaDate.toISOString().split('T')[0]; // Date in YYYY-MM-DD format
+    const time = indiaDate.toISOString().split('T')[1].split('.')[0]; // Time in HH:MM:SS format
+    return { date, time };
+  };
+
   const handlePrint = async () => {
     // Get the modal content and the buttons
     const billModal = document.getElementById('billModal');
@@ -51,12 +61,15 @@ function Bill({
     closeButton.style.display = 'none';
     printButton.style.display = 'none';
 
+    // Get the current IST date and time
+    const { date, time } = getIndianTime();
+
     // Prepare the data to send to the server
     const reservationData = {
       Name: name,
       email: email,
-      date: new Date().toISOString().split('T')[0], // Current date in YYYY-MM-DD format
-      time: new Date().toISOString().split('T')[1].split('.')[0], // Current time in HH:MM:SS format
+      date: date, // Current date in IST
+      time: time, // Current time in IST
       phone: mobileNumber,
       // Burger items
       burger1: burger1 || 0,
@@ -244,5 +257,3 @@ function Bill({
 }
 
 export default Bill;
-
-
