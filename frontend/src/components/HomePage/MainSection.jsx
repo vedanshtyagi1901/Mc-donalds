@@ -3,7 +3,7 @@ import ItemCard from './ItemCard';
 import Bill from './Bill';
 
 function MainSection({ menu }) {
-  // Declare all state variables for items (this part stays unchanged)
+  // Declare all state variables for items
   const [Burger1, setBurger1] = useState(0);
   const [Burger2, setBurger2] = useState(0);
   const [Burger3, setBurger3] = useState(0);
@@ -146,7 +146,36 @@ function MainSection({ menu }) {
           )}
         </div>
 
-        <Bill bill={bill} handleViewBill={handleViewBill} showBillModal={showBillModal} handleCloseModal={handleCloseModal}/>
+        <Bill
+          bill={bill}
+          handleViewBill={handleViewBill}
+          showBillModal={showBillModal}
+          handleCloseModal={handleCloseModal}
+          burger1={Burger1} // Pass menuState instead of individual props
+          burger2={Burger2} // Pass menuState instead of individual props
+          burger3={Burger3} // Pass menuState instead of individual props
+          burger4={Burger4} // Pass menuState instead of individual props
+
+          dessert1={Dessert1}
+          dessert2={Dessert2}
+          dessert3={Dessert3}
+          dessert4={Dessert4}
+
+          pizza1={Pizza1}
+          pizza2={Pizza2}
+          pizza3={Pizza3}
+          pizza4={Pizza4}
+
+          coldDrink1 = {Cold_Drink1}
+          coldDrink2 = {Cold_Drink2}
+          coldDrink3 = {Cold_Drink3}
+          coldDrink4 = {Cold_Drink4}
+
+          specialCombos1={SpecialCombo1}
+          specialCombos2={SpecialCombo2}
+          specialCombos3={SpecialCombo3}
+          specialCombos4={SpecialCombo4}
+        />
       </div>
     </div>
   );

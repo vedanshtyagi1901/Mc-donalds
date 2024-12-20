@@ -1,20 +1,47 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import html2canvas from 'html2canvas';
 
-function Bill({ bill, handleViewBill, showBillModal, handleCloseModal }) {
+function Bill({
+  bill,
+  handleViewBill,
+  showBillModal,
+  handleCloseModal,
+  burger1,
+  burger2,
+  burger3,
+  burger4,
+  dessert1,
+  dessert2,
+  dessert3,
+  dessert4,
+  pizza1,
+  pizza2,
+  pizza3,
+  pizza4,
+  coldDrink1,
+  coldDrink2,
+  coldDrink3,
+  coldDrink4,
+  specialCombo1,
+  specialCombo2,
+  specialCombo3,
+  specialCombo4,
+}) {
+  const [name, setName] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
-  const [seatNumber, setSeatNumber] = useState('');
+  const [email, setEmail] = useState('');
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
   const handleFormSubmit = () => {
-    if (!mobileNumber || !seatNumber) {
-      alert('Please enter both mobile number and seat number.');
+    if (!name || !mobileNumber || !email) {
+      alert('Please enter name, mobile number, and email.');
       return;
     }
     setIsFormSubmitted(true); // Show the bill details after form submission
   };
 
-  const handlePrint = () => {
+  const handlePrint = async () => {
     // Get the modal content and the buttons
     const billModal = document.getElementById('billModal');
     const closeButton = document.getElementById('closeButton');
@@ -24,43 +51,94 @@ function Bill({ bill, handleViewBill, showBillModal, handleCloseModal }) {
     closeButton.style.display = 'none';
     printButton.style.display = 'none';
 
-    // Use html2canvas to capture the modal content as an image
-    html2canvas(billModal, { logging: true, useCORS: true }).then((canvas) => {
-      // Ensure the canvas has content
-      if (!canvas || !canvas.toDataURL) {
-        console.error('Canvas creation failed.');
-        return;
+    // Prepare the data to send to the server
+    const reservationData = {
+      Name: name,
+      email: email,
+      date: new Date().toISOString().split('T')[0], // Current date in YYYY-MM-DD format
+      time: new Date().toISOString().split('T')[1].split('.')[0], // Current time in HH:MM:SS format
+      phone: mobileNumber,
+      // Burger items
+      burger1: burger1 || 0,
+      burger2: burger2 || 0,
+      burger3: burger3 || 0,
+      burger4: burger4 || 0,
+      // Dessert items
+      dessert1: dessert1 || 0,
+      dessert2: dessert2 || 0,
+      dessert3: dessert3 || 0,
+      dessert4: dessert4 || 0,
+      // Pizza items
+      pizza1: pizza1 || 0,
+      pizza2: pizza2 || 0,
+      pizza3: pizza3 || 0,
+      pizza4: pizza4 || 0,
+      // Cold drink items
+      coldDrink1: coldDrink1 || 0,
+      coldDrink2: coldDrink2 || 0,
+      coldDrink3: coldDrink3 || 0,
+      coldDrink4: coldDrink4 || 0,
+      // Special Combo items
+      specialCombos1: specialCombo1 || 0,
+      specialCombos2: specialCombo2 || 0,
+      specialCombos3: specialCombo3 || 0,
+      specialCombos4: specialCombo4 || 0,
+    };
+
+    try {
+      // Send the reservation and bill details to the API
+      const response = await axios.post('http://localhost:4000/api/v1/reservation/send', reservationData);
+
+      if (response.data.success) {
+        alert('Reservation and Bill Created Successfully!');
+      } else {
+        alert('There was an issue creating the reservation and bill.');
       }
 
-      // Create an image from the canvas
-      const imgData = canvas.toDataURL('image/png');
+      // Use html2canvas to capture the modal content as an image
+      html2canvas(billModal, { logging: true, useCORS: true }).then((canvas) => {
+        if (!canvas || !canvas.toDataURL) {
+          console.error('Canvas creation failed.');
+          return;
+        }
 
-      // Create a temporary window for printing
-      const printWindow = window.open('', '', 'height=600,width=800');
-      printWindow.document.write(
-        '<html><body><img src="' +
-          imgData +
-          '" style="width: 100%; height: auto;"/></body></html>'
-      );
-      printWindow.document.close();
+        // Create an image from the canvas
+        const imgData = canvas.toDataURL('image/png');
 
-      // Wait a short delay to ensure image rendering before printing
-      printWindow.onload = () => {
-        setTimeout(() => {
-          printWindow.print();
-          printWindow.close(); // Close the print window after printing
-        }, 500);
-      };
+        // Create a temporary window for printing
+        const printWindow = window.open('', '', 'height=600,width=800');
+        printWindow.document.write(
+          '<html><body><img src="' +
+            imgData +
+            '" style="width: 100%; height: auto;"/></body></html>'
+        );
+        printWindow.document.close();
 
-      // Restore the visibility of the buttons
-      closeButton.style.display = 'block';
-      printButton.style.display = 'block';
-    }).catch((error) => {
-      console.error('Error capturing the modal content:', error);
+        // Wait a short delay to ensure image rendering before printing
+        printWindow.onload = () => {
+          setTimeout(() => {
+            printWindow.print();
+            printWindow.close(); // Close the print window after printing
+          }, 500);
+        };
+
+        // Restore the visibility of the buttons
+        closeButton.style.display = 'block';
+        printButton.style.display = 'block';
+      }).catch((error) => {
+        console.error('Error capturing the modal content:', error);
+        // Restore the visibility of the buttons in case of an error
+        closeButton.style.display = 'block';
+        printButton.style.display = 'block';
+      });
+
+    } catch (err) {
+      console.error('Error sending data to the server:', err);
+      alert('An error occurred while processing the reservation and bill.');
       // Restore the visibility of the buttons in case of an error
       closeButton.style.display = 'block';
       printButton.style.display = 'block';
-    });
+    }
   };
 
   return (
@@ -81,10 +159,21 @@ function Bill({ bill, handleViewBill, showBillModal, handleCloseModal }) {
             id="billModal" // Add id for html2canvas targeting
             className="bg-white p-6 rounded-lg shadow-lg w-96 transform scale-95 transition-all duration-500 ease-in-out opacity-100 animate-modal-in"
           >
-            {/* First ask for the mobile number and seat number */}
+            {/* First ask for the mobile number, seat number, and email */}
             {!isFormSubmitted ? (
               <div className="bg-yellow-400 p-6 rounded-lg shadow-lg">
                 <h2 className="text-xl font-semibold mb-4 text-center text-red-600">Enter Your Details</h2>
+                <div className="mb-4">
+                  <label htmlFor="name" className="block text-sm font-semibold text-red-600">Name:</label>
+                  <input
+                    id="name"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Enter your name"
+                    className="w-full p-2 border border-gray-300 rounded mt-2"
+                  />
+                </div>
                 <div className="mb-4">
                   <label htmlFor="mobileNumber" className="block text-sm font-semibold text-red-600">Mobile Number:</label>
                   <input
@@ -97,13 +186,13 @@ function Bill({ bill, handleViewBill, showBillModal, handleCloseModal }) {
                   />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="seatNumber" className="block text-sm font-semibold text-red-600">Seat Number:</label>
+                  <label htmlFor="email" className="block text-sm font-semibold text-red-600">Email:</label>
                   <input
-                    id="seatNumber"
-                    type="text"
-                    value={seatNumber}
-                    onChange={(e) => setSeatNumber(e.target.value)}
-                    placeholder="Enter seat number"
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter email"
                     className="w-full p-2 border border-gray-300 rounded mt-2"
                   />
                 </div>
@@ -155,3 +244,5 @@ function Bill({ bill, handleViewBill, showBillModal, handleCloseModal }) {
 }
 
 export default Bill;
+
+
