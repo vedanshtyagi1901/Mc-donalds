@@ -52,10 +52,33 @@ const send_reservation = async (req, res, next) => {
     // Create the reservation
     const reservation = await Reservation.create({ Name, email, date, time, phone });
 
+    let Tamount =
+      (burger1 * 300 || 0) +
+      (burger2 * 350 || 0) +
+      (burger3 * 400 || 0) +
+      (burger4 * 250 || 0) +
+      (dessert1 * 150 || 0) +
+      (dessert2 * 100 || 0) +
+      (dessert3 * 200 || 0) +
+      (dessert4 * 250 || 0) +
+      (pizza1 * 500 || 0) +
+      (pizza2 * 600 || 0) +
+      (pizza3 * 450 || 0) +
+      (pizza4 * 550 || 0) +
+      (coldDrink1 * 10 || 0) +
+      (coldDrink2 * 10 || 0) +
+      (coldDrink3 * 10 || 0) +
+      (coldDrink4 * 10 || 0) +
+      (specialCombos1 * 700 || 0) +
+      (specialCombos2 * 800 || 0) +
+      (specialCombos3 * 900 || 0) +
+      (specialCombos4 * 850 || 0);
+
+
     // Create the bill with the same _id as the reservation
     const newBill = new Bill({
       _id: reservation._id,  // Set the same _id as the reservation
-      totalAmount: 0,  // Total amount will be calculated based on the items
+      totalAmount: Tamount || 0,  // Total amount will be calculated based on the items
       // Set item quantities dynamically from the user input
       Quantity_burger1: burger1 || 0,
       Quantity_burger2: burger2 || 0,
@@ -78,25 +101,6 @@ const send_reservation = async (req, res, next) => {
       Quantity_special_combos3: specialCombos3 || 0,
       Quantity_special_combos4: specialCombos4 || 0,
     });
-
-    // // Calculate totalAmount (assuming each item has a fixed price)
-    // const prices = {
-    //   burger1: 100, burger2: 120, burger3: 150, burger4: 180,
-    //   dessert1: 50, dessert2: 60, dessert3: 70, dessert4: 80,
-    //   pizza1: 200, pizza2: 220, pizza3: 250, pizza4: 270,
-    //   coldDrink1: 30, coldDrink2: 35, coldDrink3: 40, coldDrink4: 45,
-    //   specialCombos1: 250, specialCombos2: 270, specialCombos3: 300, specialCombos4: 330
-    // };
-
-    // let totalAmount = 0;
-    // for (let key in newBill) {
-    //   if (key.startsWith('Quantity_') && newBill[key] > 0) {
-    //     const itemName = key.replace('Quantity_', '');
-    //     totalAmount += newBill[key] * prices[itemName];
-    //   }
-    // }
-
-    // newBill.totalAmount = totalAmount;
 
     // Save the bill
     await newBill.save();

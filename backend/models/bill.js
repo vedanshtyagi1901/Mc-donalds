@@ -100,3 +100,6 @@ const billSchema = new mongoose.Schema({
 });
 
 export const Bill = mongoose.model("Bill", billSchema);
+
+
+
