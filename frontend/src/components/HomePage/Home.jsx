@@ -1,11 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CardSection from './CardSection';
 import Sidebar from './Sidebar';
 import Heading from './Heading';
 import MainSection from './MainSection';
+import axios from 'axios';
 
 
 function Home() {
+  const [fetchedItems, setFetchedItems] = useState([]);
+
+
+  // Fetch menu data from the API
+  const fetchMenuData = async () => {
+    try {
+      const response = await axios.get("http://localhost:4000/api/v1/reservation/get_data");
+      setFetchedItems(response.data.menuItems); // Set fetched menu items to state
+      console.log(fetchedItems)
+    } catch (e) {
+      console.log("Error fetching data:", e);
+    }
+  };
+
+  // Fetch data when the component is mounted
+  useEffect(() => {
+    fetchMenuData();
+  }, []);
+
+
   const [showSidebar, setShowSidebar] = useState(false); // sidebar is not displayed initially
   const [fadeOut, setFadeOut] = useState(false); // No fading of heading and card section occur initially
   const [showContent, setShowContent] = useState(true); // State to hide content after fade out
@@ -24,7 +45,7 @@ function Home() {
     <div className="bg-yellow-400 h-screen">
 
       {/* Conditionally render Heading and CardSection with fade effect */}
-      
+
       {/* This is my heading */}
       <div
         className={`transition-opacity duration-500 ${fadeOut ? 'opacity-0' : 'opacity-100'}`}
@@ -42,12 +63,9 @@ function Home() {
       </div>
 
       {/* Conditionally render Sidebar with sliding effect */}
-      {showSidebar && (<div> <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} menu={menu} setMenu={setMenu} /> </div>)} 
-      {showSidebar && (<div> <MainSection menu={menu}/> </div>)} 
-      
-      
-      
-      </div>
+      {showSidebar && (<div> <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} menu={menu} setMenu={setMenu} /> </div>)}
+      {showSidebar && (<div> <MainSection menu={menu} fetchedItems={fetchedItems} /> </div>)}
+    </div>
   );
 }
 

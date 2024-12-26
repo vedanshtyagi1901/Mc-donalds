@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ItemCard from './ItemCard';
 import Bill from './Bill';
 
-function MainSection({ menu }) {
+function MainSection({ menu, fetchedItems }) {
   // Declare all state variables for items
   const [Burger1, setBurger1] = useState(0);
   const [Burger2, setBurger2] = useState(0);
@@ -29,10 +29,11 @@ function MainSection({ menu }) {
   const [SpecialCombo3, setSpecialCombo3] = useState(0);
   const [SpecialCombo4, setSpecialCombo4] = useState(0);
 
+  // Menu items structure based on fetched data
   const menuItems = {
     Burger: [
-      { image: './various-burgers/burger1.png', title: 'Margreta', price: 300, getter: Burger1, setter: setBurger1 },
-      { image: './various-burgers/burger2.png', title: 'Cheeseburger', price: 350, getter: Burger2, setter: setBurger2 },
+      { image: fetchedItems[0]?.image, title: fetchedItems[0]?.title || 'Burger 1', price: 300, getter: Burger1, setter: setBurger1 },
+      { image: fetchedItems[1]?.image, title: fetchedItems[0]?.title, price: fetchedItems[0]?.price, getter: Burger2, setter: setBurger2 },
       { image: './various-burgers/burger3.png', title: 'Chicken Burger', price: 400, getter: Burger3, setter: setBurger3 },
       { image: './various-burgers/burger4.png', title: 'Veggie Burger', price: 250, getter: Burger4, setter: setBurger4 },
     ],
@@ -45,7 +46,7 @@ function MainSection({ menu }) {
     Dessert: [
       { image: './various-desserts/chocolate-cake.png', title: 'Chocolate Cake', price: 150, getter: Dessert1, setter: setDessert1 },
       { image: './various-desserts/ice-cream.png', title: 'Ice Cream', price: 100, getter: Dessert2, setter: setDessert2 },
-      { image: './various-desserts/fruit-chart.png', title: 'Fruit Tart', price: 200, getter: Dessert3, setter: setDessert3 },
+      { image: './various-desserts/fruit-chart.png', title: 'Fruit Chaat', price: 200, getter: Dessert3, setter: setDessert3 },
       { image: './various-desserts/cheese-cake.png', title: 'Cheesecake', price: 250, getter: Dessert4, setter: setDessert4 },
     ],
     "Cold Drinks": [
@@ -115,62 +116,66 @@ function MainSection({ menu }) {
   return (
     <div className="pl-80 py-10 pr-10">
       <div className="h-[85vh] p-10">
-        <div className="card-wrapper">
-          {selectedMenuItems.length > 0 ? (
-            selectedMenuItems.map((item, index) => (
-              <div className={`card ${flip ? 'flip' : ''}`} key={item.title}>
-                <div className="card-inner">
-                  <div className="card-front">
-                    <ItemCard
-                      image={item.image}
-                      title={item.title}
-                      price={item.price}
-                      count={item.getter}
-                      updateCount={item.setter}
-                    />
-                  </div>
-                  <div className="card-back">
-                    <ItemCard
-                      image={item.image}
-                      title={`${item.title} - Back`}
-                      price={item.price}
-                      count={item.getter}
-                      updateCount={item.setter}
-                    />
+        {/* Only render when loading is false */}
+        {false ? (
+          <div className="loading-spinner">
+            {/* Simple CSS Spinner */}
+            <div className="spinner"></div>
+          </div>
+        ) : (
+          <div className="card-wrapper">
+            {selectedMenuItems.length > 0 ? (
+              selectedMenuItems.map((item, index) => (
+                <div className={`card ${flip ? 'flip' : ''}`} key={item.title}>
+                  <div className="card-inner">
+                    <div className="card-front">
+                      <ItemCard
+                        image={item.image}
+                        title={item.title}
+                        price={item.price}
+                        count={item.getter}
+                        updateCount={item.setter}
+                      />
+                    </div>
+                    <div className="card-back">
+                      <ItemCard
+                        image={item.image}
+                        title={`${item.title} - Back`}
+                        price={item.price}
+                        count={item.getter}
+                        updateCount={item.setter}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
-          ) : (
-            <div>No items available for this menu.</div>
-          )}
-        </div>
+              ))
+            ) : (
+              <div>No items available for this menu.</div>
+            )}
+          </div>
+        )}
 
         <Bill
           bill={bill}
           handleViewBill={handleViewBill}
           showBillModal={showBillModal}
           handleCloseModal={handleCloseModal}
-          burger1={Burger1} // Pass menuState instead of individual props
-          burger2={Burger2} // Pass menuState instead of individual props
-          burger3={Burger3} // Pass menuState instead of individual props
-          burger4={Burger4} // Pass menuState instead of individual props
-
+          burger1={Burger1}
+          burger2={Burger2}
+          burger3={Burger3}
+          burger4={Burger4}
           dessert1={Dessert1}
           dessert2={Dessert2}
           dessert3={Dessert3}
           dessert4={Dessert4}
-
           pizza1={Pizza1}
           pizza2={Pizza2}
           pizza3={Pizza3}
           pizza4={Pizza4}
-
-          coldDrink1 = {Cold_Drink1}
-          coldDrink2 = {Cold_Drink2}
-          coldDrink3 = {Cold_Drink3}
-          coldDrink4 = {Cold_Drink4}
-
+          coldDrink1={Cold_Drink1}
+          coldDrink2={Cold_Drink2}
+          coldDrink3={Cold_Drink3}
+          coldDrink4={Cold_Drink4}
           specialCombos1={SpecialCombo1}
           specialCombos2={SpecialCombo2}
           specialCombos3={SpecialCombo3}
@@ -182,3 +187,4 @@ function MainSection({ menu }) {
 }
 
 export default MainSection;
+

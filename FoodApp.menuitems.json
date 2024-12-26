@@ -1,0 +1,160 @@
+[{
+  "_id": {
+    "$oid": "676a74154017c510ef92a87c"
+  },
+  "image": "./various-burgers/burger1.png",
+  "title": "Margreta",
+  "price": 300
+},
+{
+  "_id": {
+    "$oid": "676a86604017c510ef92a87d"
+  },
+  "image": "./various-burgers/burger2.png",
+  "title": "Cheese Burger",
+  "price": 350
+},
+{
+  "_id": {
+    "$oid": "676bdc411df94b199c77d61c"
+  },
+  "image": "./various-burgers/burger3.png",
+  "title": "Chicken Burger",
+  "price": 400
+},
+{
+  "_id": {
+    "$oid": "676bdc6c1df94b199c77d61d"
+  },
+  "image": "./various-burgers/burger4.png",
+  "title": "Veggie Burger",
+  "price": 250
+},
+{
+  "_id": {
+    "$oid": "676cc0120a8619ecb2a2c9e4"
+  },
+  "image": "./various-pizzas/pizza1.png",
+  "title": "Margherita Pizza",
+  "price": 500
+},
+{
+  "_id": {
+    "$oid": "676cc0560a8619ecb2a2c9e5"
+  },
+  "image": "./various-pizzas/pizza2.png",
+  "title": "Pepperoni Pizza",
+  "price": 600
+},
+{
+  "_id": {
+    "$oid": "676cc08e0a8619ecb2a2c9e7"
+  },
+  "image": "./various-pizzas/pizza3.png",
+  "title": "Veggie Pizza",
+  "price": 450
+},
+{
+  "_id": {
+    "$oid": "676cc0c10a8619ecb2a2c9e9"
+  },
+  "image": "./various-pizzas/pizza4.png",
+  "title": "BBQ Chicken Pizza",
+  "price": 550
+},
+{
+  "_id": {
+    "$oid": "676cc0f70a8619ecb2a2c9ea"
+  },
+  "image": "./various-desserts/chocolate-cake.png",
+  "title": "Chocolate Cake",
+  "price": 150
+},
+{
+  "_id": {
+    "$oid": "676cc1000a8619ecb2a2c9eb"
+  },
+  "image": "./various-desserts/ice-cream.png",
+  "title": "Ice Cream",
+  "price": 100
+},
+{
+  "_id": {
+    "$oid": "676cc1070a8619ecb2a2c9ec"
+  },
+  "image": "./various-desserts/fruit-chart.png",
+  "title": "Fruit Chaat",
+  "price": 200
+},
+{
+  "_id": {
+    "$oid": "676cc10d0a8619ecb2a2c9ed"
+  },
+  "image": "./various-desserts/cheese-cake.png",
+  "title": "Cheesecake",
+  "price": 250
+},
+{
+  "_id": {
+    "$oid": "676cc11c0a8619ecb2a2c9ee"
+  },
+  "image": "./various-cold-drinks/Coke.png",
+  "title": "Coke",
+  "price": 10
+},
+{
+  "_id": {
+    "$oid": "676cc1280a8619ecb2a2c9ef"
+  },
+  "image": "./various-cold-drinks/Mountain_Dew.png",
+  "title": "Mountain DEW",
+  "price": 10
+},
+{
+  "_id": {
+    "$oid": "676cc1310a8619ecb2a2c9f0"
+  },
+  "image": "./various-cold-drinks/Fanta.png",
+  "title": "Fanta",
+  "price": 10
+},
+{
+  "_id": {
+    "$oid": "676cc1390a8619ecb2a2c9f1"
+  },
+  "image": "./various-cold-drinks/Pepsi.png",
+  "title": "Pepsi",
+  "price": 10
+},
+{
+  "_id": {
+    "$oid": "676cc1400a8619ecb2a2c9f2"
+  },
+  "image": "./various-items/Special Combo.png",
+  "title": "Combo A",
+  "price": 700
+},
+{
+  "_id": {
+    "$oid": "676cc1470a8619ecb2a2c9f3"
+  },
+  "image": "./various-items/Special Combo.png",
+  "title": "Combo B",
+  "price": 700
+},
+{
+  "_id": {
+    "$oid": "676cc14f0a8619ecb2a2c9f4"
+  },
+  "image": "./various-items/Special Combo.png",
+  "title": "Combo C",
+  "price": 700
+},
+{
+  "_id": {
+    "$oid": "676cc1580a8619ecb2a2c9f5"
+  },
+  "image": "./various-items/Special Combo.png",
+  "title": "Combo D",
+  "price": 700
+}]
