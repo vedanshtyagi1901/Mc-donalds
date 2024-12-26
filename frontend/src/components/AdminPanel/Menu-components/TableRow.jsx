@@ -6,9 +6,18 @@ function TableRow({ reference, id }) {
   const [image, setImage] = useState('');
   const [price, setPrice] = useState('');
   const [loading, setLoading] = useState(true); // Optional loading state
+  const [isEditable, setIsEditable] = useState(false); // Track if fields are editable
+  const [buttonText, setButtonText] = useState('Update'); // Button text state
 
   // Function to handle the "Update" button click
-  const handleUpdate = async () => {
+  const handleUpdate = () => {
+    // Set fields to be editable and change button to 'Send'
+    setIsEditable(true);
+    setButtonText('Send');
+  };
+
+  // Function to handle the "Send" button click
+  const handleSend = async () => {
     try {
       // Send the updated data to the backend using POST request
       const response = await axios.post(
@@ -17,7 +26,10 @@ function TableRow({ reference, id }) {
       );
       console.log('Updated Menu Item:', response.data);
       alert("Updated successfully");
-      // Optionally, handle the response, like showing a success message
+
+      // After sending, set fields back to non-editable and reset button text
+      setIsEditable(false);
+      setButtonText('Update');
     } catch (error) {
       console.error('Error updating menu item:', error);
     }
@@ -59,6 +71,7 @@ function TableRow({ reference, id }) {
           value={title} 
           onChange={(e) => setTitle(e.target.value)} 
           className="w-full bg-transparent border-b-2 border-gray-700 px-2 py-1" 
+          disabled={!isEditable} // Disable input if not editable
         />
       </td>
       <td className="border border-gray-700 px-4 py-2 text-blue-500 underline">
@@ -67,6 +80,7 @@ function TableRow({ reference, id }) {
           value={image} 
           onChange={(e) => setImage(e.target.value)} 
           className="w-full bg-transparent border-b-2 border-gray-700 px-2 py-1" 
+          disabled={!isEditable} // Disable input if not editable
         />
       </td>
       <td className="border border-gray-700 px-4 py-2">
@@ -75,14 +89,15 @@ function TableRow({ reference, id }) {
           value={price} 
           onChange={(e) => setPrice(e.target.value)} 
           className="w-full bg-transparent border-b-2 border-gray-700 px-2 py-1" 
+          disabled={!isEditable} // Disable input if not editable
         />
       </td>
       <td className="border border-gray-700 px-4 py-2">
         <button
-          onClick={handleUpdate}
+          onClick={isEditable ? handleSend : handleUpdate} // Toggle between Update and Send
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
-          Update
+          {buttonText} {/* Button text will be either "Update" or "Send" */}
         </button>
       </td>
     </tr>
