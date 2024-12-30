@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Menu from './Menu-components/Menu'
+import DataVisualization from './Analytics-components/DataVisualization';
 
 function SideBar() {
     const [content, setContent] = useState('');
@@ -27,7 +28,7 @@ function SideBar() {
                             </li>
 
                             {/* Analytics Link */}
-                            <li>
+                            <li onClick={() => setContent('Analytics')}>
                                 <a href="#" className="flex items-center space-x-4 py-3 px-4 rounded-lg hover:bg-indigo-600 transition duration-300">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m4-4h-4m-4 8h4m6 0h-2a2 2 0 01-2-2V7a2 2 0 012-2h2M5 3v18a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2z" />
@@ -89,6 +90,8 @@ function SideBar() {
                     </div>
                 </div>
                 {content === 'Menu' && <Menu />}
+                {/* {content === 'Menu' && <DemoTable/>} */}
+                {content === 'Analytics' && <DataVisualization />}
                 {/* {content === 'Menu' && <DemoTable/>} */}
 
             </div>

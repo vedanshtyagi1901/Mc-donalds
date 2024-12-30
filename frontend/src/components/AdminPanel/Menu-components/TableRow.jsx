@@ -70,7 +70,7 @@ function TableRow({ reference, id }) {
           type="text" 
           value={title} 
           onChange={(e) => setTitle(e.target.value)} 
-          className="w-full bg-transparent border-b-2 border-gray-700 px-2 py-1" 
+          className="w-full bg-transparent px-2 py-1" 
           disabled={!isEditable} // Disable input if not editable
         />
       </td>
@@ -79,7 +79,7 @@ function TableRow({ reference, id }) {
           type="text" 
           value={image} 
           onChange={(e) => setImage(e.target.value)} 
-          className="w-full bg-transparent border-b-2 border-gray-700 px-2 py-1" 
+          className="w-full bg-transparent px-2 py-1" 
           disabled={!isEditable} // Disable input if not editable
         />
       </td>
@@ -88,7 +88,7 @@ function TableRow({ reference, id }) {
           type="number" 
           value={price} 
           onChange={(e) => setPrice(e.target.value)} 
-          className="w-full bg-transparent border-b-2 border-gray-700 px-2 py-1" 
+          className="w-full bg-transparent px-2 py-1"
           disabled={!isEditable} // Disable input if not editable
         />
       </td>
