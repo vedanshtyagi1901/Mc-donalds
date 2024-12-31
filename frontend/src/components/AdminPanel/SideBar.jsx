@@ -1,13 +1,16 @@
-import React, { useState } from 'react'
-import Menu from './Menu-components/Menu'
+import React, { useState } from 'react';
+import Menu from './Menu-components/Menu';
 import CategoryWiseSalesChart from './Analytics-components/CategoryWiseSalesChart';
+// import BarChartComponent from './Analytics-components/BarChartComponent';  // Example import for bar chart
+// import LineChartComponent from './Analytics-components/LineChartComponent'; // Example import for line chart
 
 function SideBar() {
     const [content, setContent] = useState('');
+    const [analyticsOpen, setAnalyticsOpen] = useState(false); // State to manage analytics dropdown
+
     return (
         <>
             <div className='flex bg-[rgb(16,20,34)]'>
-
                 <div className="h-screen w-64 bg-gray-800 text-white p-4">
                     {/* Logo Section */}
                     <div className="flex items-center justify-center mb-8">
@@ -27,14 +30,34 @@ function SideBar() {
                                 </a>
                             </li>
 
-                            {/* Analytics Link */}
-                            <li onClick={() => setContent('Analytics')}>
-                                <a href="#" className="flex items-center space-x-4 py-3 px-4 rounded-lg hover:bg-indigo-600 transition duration-300">
+                            {/* Analytics Link with Dropdown */}
+                            <li>
+                                <a
+                                    href="#"
+                                    className="flex items-center space-x-4 py-3 px-4 rounded-lg hover:bg-indigo-600 transition duration-300"
+                                    onClick={() => setAnalyticsOpen(!analyticsOpen)} // Toggle dropdown
+                                >
                                     <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m4-4h-4m-4 8h4m6 0h-2a2 2 0 01-2-2V7a2 2 0 012-2h2M5 3v18a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2z" />
                                     </svg>
                                     <span className="text-lg">Analytics</span>
                                 </a>
+
+                                {/* Dropdown Menu for Analytics */}
+                                {analyticsOpen && (
+                                    <ul className="pl-8 mt-2 space-y-2">
+                                        <li onClick={() => setContent('Sales-Chart')}>
+                                            <a href="#" className="flex items-center space-x-4 py-2 px-4 rounded-lg hover:bg-indigo-600 transition duration-300">
+                                                <span className="text-lg">Sales Chart</span>
+                                            </a>
+                                        </li>
+                                        <li onClick={() => setContent('LineChart')}>
+                                            <a href="#" className="flex items-center space-x-4 py-2 px-4 rounded-lg hover:bg-indigo-600 transition duration-300">
+                                                <span className="text-lg">Annual Profit</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                )}
                             </li>
 
                             {/* User Management Link */}
@@ -89,14 +112,15 @@ function SideBar() {
                         </div>
                     </div>
                 </div>
-                {content === 'Menu' && <Menu />}
-                {/* {content === 'Menu' && <DemoTable/>} */}
-                {content === 'Analytics' && <CategoryWiseSalesChart />}
-                {/* {content === 'Menu' && <DemoTable/>} */}
 
+                {/* Display the selected chart content */}
+                {content === 'Menu' && <Menu />}
+                {content === 'Sales-Chart' && <CategoryWiseSalesChart />}
+                {/* {content === 'BarChart' && <BarChartComponent />} */}
+                {/* {content === 'LineChart' && <LineChartComponent />} */}
             </div>
         </>
-    )
+    );
 }
 
-export default SideBar
+export default SideBar;
