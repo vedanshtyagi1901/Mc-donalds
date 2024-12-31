@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Doughnut, Line } from 'react-chartjs-2'; // Import Line chart for time series
 import { Chart as ChartJS } from 'chart.js'; // Import ChartJS to register components
 import { ArcElement, Tooltip, Legend, Title, LineElement, CategoryScale, LinearScale, PointElement } from 'chart.js'; // Register necessary chart elements
-import { format, isToday, isThisMonth, isThisYear, parseISO } from 'date-fns'; // Import date-fns for date comparison
+import { format, isToday, isThisMonth, isThisYear, parseISO, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear } from 'date-fns'; // Import date-fns for date comparison
 
 // Register necessary Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend, Title, LineElement, CategoryScale, LinearScale, PointElement); // Added PointElement here
@@ -11,6 +11,7 @@ function AnnualProfit() {
     const [reservations, setReservations] = useState([]);
     const [bills, setBills] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [timeRange, setTimeRange] = useState('daily'); // State to manage time range (daily, weekly, monthly, yearly)
 
     // Fetch data from API
     useEffect(() => {
@@ -78,47 +79,68 @@ function AnnualProfit() {
         return { today, thisMonth, thisYear, allTime };
     };
 
-    // Function to prepare time-series data for the chart
-    const prepareTimeSeriesData = (reservations, bills) => {
-        // Create an object to store earnings by date
+    const groupDataByTimeRange = (reservations, bills, timeRange) => {
         const earningsByDate = {};
-
-        // Get the earliest and latest dates in the dataset
-        const allDates = reservations.map((reservation) => new Date(reservation.date));
-        const minDate = new Date(Math.min(...allDates));
-        const maxDate = new Date(Math.max(...allDates));
-
-        // Loop through all dates in the range and fill in the earningsByDate object
-        let currentDate = minDate;
-
-        while (currentDate <= maxDate) {
-            const formattedDate = format(currentDate, 'yyyy-MM-dd'); // Format date as string
-            earningsByDate[formattedDate] = 0; // Default value 0 for missing dates
-
-            // Move to the next day
-            currentDate.setDate(currentDate.getDate() + 1);
-        }
-
-        // Match each reservation with the corresponding bill
+    
+        // Helper function to format dates based on the time range
+        const getFormattedDate = (date) => {
+            switch (timeRange) {
+                case 'weekly':
+                    const startOfWeekDate = startOfWeek(date);
+                    return format(startOfWeekDate, 'yyyy-MM-dd');
+                case 'monthly':
+                    const startOfMonthDate = startOfMonth(date);
+                    return format(startOfMonthDate, 'yyyy-MM-dd');
+                case 'yearly':
+                    const startOfYearDate = startOfYear(date);
+                    return format(startOfYearDate, 'yyyy-MM-dd');
+                default:
+                    return format(date, 'yyyy-MM-dd'); // Daily
+            }
+        };
+    
+        // Aggregate earnings based on the selected time range
         reservations.forEach((reservation) => {
             const matchingBill = bills.find((bill) => bill._id === reservation._id);
             if (matchingBill) {
                 const billDate = new Date(reservation.date);
-                const formattedDate = format(billDate, 'yyyy-MM-dd'); // Format date as string
-
-                earningsByDate[formattedDate] += matchingBill.totalAmount; // Add earnings for that date
+                const formattedDate = getFormattedDate(billDate);
+    
+                if (!earningsByDate[formattedDate]) {
+                    earningsByDate[formattedDate] = 0;
+                }
+                earningsByDate[formattedDate] += matchingBill.totalAmount;
             }
         });
-
-        // Convert earningsByDate to arrays for chart.js
-        const labels = Object.keys(earningsByDate); // Dates
-        const data = Object.values(earningsByDate); // Corresponding earnings
-
+    
+        // Sort the keys (dates) and create a reduced list of labels
+        const sortedDates = Object.keys(earningsByDate).sort();
+        const labels = [];
+        const data = [];
+    
+        sortedDates.forEach((date, index) => {
+            if (timeRange === 'weekly' && index > 0) {
+                // Ensure only one date per week is added
+                const prevDate = new Date(sortedDates[index - 1]);
+                const currDate = new Date(date);
+                if (getFormattedDate(currDate) !== getFormattedDate(prevDate)) {
+                    labels.push(date);
+                    data.push(earningsByDate[date]);
+                }
+            } else {
+                // For other ranges or the first date in weekly, add it directly
+                labels.push(date);
+                data.push(earningsByDate[date]);
+            }
+        });
+    
         return { labels, data };
     };
+    
+    
 
-    // Prepare the time series data
-    const timeSeriesData = prepareTimeSeriesData(reservations, bills);
+    // Prepare the time series data based on the selected time range
+    const timeSeriesData = groupDataByTimeRange(reservations, bills, timeRange);
 
     // Chart.js Line Chart Data for Time Series
     const lineChartData = {
@@ -152,7 +174,6 @@ function AnnualProfit() {
         <div className="time_series_container mx-14 p-4 text-white justify-center">
             {/* Doughnut Charts for Today, Monthly, Yearly, All-Time Earnings */}
             <div className="donut-container">
-
                 <div className="flex flex-row gap-36">
                     {/* Today's Earnings */}
                     <div className="chart-container" style={{ width: '160px', height: '160px' }}>
@@ -160,21 +181,18 @@ function AnnualProfit() {
                         <Doughnut data={doughnutData(calculateEarnings(reservations, bills).today)} options={{ responsive: true }} />
                         <p className="text-center mt-2">{`₹${calculateEarnings(reservations, bills).today.toLocaleString()}`}</p>
                     </div>
-
                     {/* Monthly Earnings */}
                     <div className="chart-container" style={{ width: '160px', height: '160px' }}>
                         <h2 className="text-center">Monthly Earnings</h2>
                         <Doughnut data={doughnutData(calculateEarnings(reservations, bills).thisMonth)} options={{ responsive: true }} />
                         <p className="text-center mt-2">{`₹${calculateEarnings(reservations, bills).thisMonth.toLocaleString()}`}</p>
                     </div>
-
                     {/* Annual Earnings */}
                     <div className="chart-container" style={{ width: '160px', height: '160px' }}>
                         <h2 className="text-center">Annual Earnings</h2>
                         <Doughnut data={doughnutData(calculateEarnings(reservations, bills).thisYear)} options={{ responsive: true }} />
                         <p className="text-center mt-2">{`₹${calculateEarnings(reservations, bills).thisYear.toLocaleString()}`}</p>
                     </div>
-
                     {/* All-Time Earnings */}
                     <div className="chart-container" style={{ width: '160px', height: '160px' }}>
                         <h2 className="text-center">All-Time Earnings</h2>
@@ -183,30 +201,46 @@ function AnnualProfit() {
                     </div>
                 </div>
             </div>
-
-            <div className="chart-section">
+            <div className="chart-section flex justify-start items-start gap-6 mt-16 mx-40">
 
                 {/* Time Series Line Chart */}
-                <div className="chart-container w-[800px] mx-28 mt-16 bg-gray-800">
-                    <h2 className="text-center">Earnings Over Time</h2>
-                    <Line data={lineChartData} options={{
-                        responsive: true,
-                        scales: {
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Date',
+                <div className="chart-container bg-gray-800" style={{ minWidth: '800px', width: '100%' }}>
+                    <h2 className="text-center text-white">Earnings Over Time</h2>
+                    {/* Container with Horizontal Scroll */}
+                    <div className="overflow-x-auto">
+                        <Line data={lineChartData} options={{
+                            responsive: true,
+                            scales: {
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Date',
+                                    },
+                                    ticks: {
+                                        autoSkip: true,  // Automatically skips labels if there are too many
+                                        maxRotation: 45, // Rotate labels to make them more readable
+                                        minRotation: 30, // Rotate labels at minimum 30 degrees
+                                    }
+                                },
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: 'Earnings (₹)',
+                                    },
                                 },
                             },
-                            y: {
-                                title: {
-                                    display: true,
-                                    text: 'Earnings (₹)',
-                                },
-                            },
-                        },
-                    }} />
+                        }} />
+                    </div>
                 </div>
+
+                {/* Buttons for time range selection */}
+                <div className="flex flex-col justify-center gap-12 mt-20">
+                    <button onClick={() => setTimeRange('daily')} className="btn bg-gray-800 text-white py-2 px-4 rounded-md hover:bg-gray-700">Daily</button>
+                    <button onClick={() => setTimeRange('weekly')} className="btn bg-gray-800 text-white py-2 px-4 rounded-md hover:bg-gray-700">Weekly</button>
+                    <button onClick={() => setTimeRange('monthly')} className="btn bg-gray-800 text-white py-2 px-4 rounded-md hover:bg-gray-700">Monthly</button>
+                    <button onClick={() => setTimeRange('yearly')} className="btn bg-gray-800 text-white py-2 px-4 rounded-md hover:bg-gray-700">Yearly</button>
+                </div>
+
             </div>
         </div>
     );
