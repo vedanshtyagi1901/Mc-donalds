@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import Menu from './Menu-components/Menu';
 import CategoryWiseSalesChart from './Analytics-components/CategoryWiseSalesChart';
-// import BarChartComponent from './Analytics-components/BarChartComponent';  // Example import for bar chart
-// import LineChartComponent from './Analytics-components/LineChartComponent'; // Example import for line chart
+import AnnualProfit from './Analytics-components/AnnualProfit';
 
 function SideBar() {
     const [content, setContent] = useState('');
@@ -51,7 +50,7 @@ function SideBar() {
                                                 <span className="text-lg">Sales Chart</span>
                                             </a>
                                         </li>
-                                        <li onClick={() => setContent('LineChart')}>
+                                        <li onClick={() => setContent('Annual-Profit')}>
                                             <a href="#" className="flex items-center space-x-4 py-2 px-4 rounded-lg hover:bg-indigo-600 transition duration-300">
                                                 <span className="text-lg">Annual Profit</span>
                                             </a>
@@ -116,8 +115,7 @@ function SideBar() {
                 {/* Display the selected chart content */}
                 {content === 'Menu' && <Menu />}
                 {content === 'Sales-Chart' && <CategoryWiseSalesChart />}
-                {/* {content === 'BarChart' && <BarChartComponent />} */}
-                {/* {content === 'LineChart' && <LineChartComponent />} */}
+                {content === 'Annual-Profit' && <AnnualProfit/>}
             </div>
         </>
     );
