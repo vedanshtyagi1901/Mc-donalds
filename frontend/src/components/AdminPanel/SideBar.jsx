@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Menu from './Menu-components/Menu'
-import DataVisualization from './Analytics-components/DataVisualization';
+import CategoryWiseSalesChart from './Analytics-components/CategoryWiseSalesChart';
 
 function SideBar() {
     const [content, setContent] = useState('');
@@ -91,7 +91,7 @@ function SideBar() {
                 </div>
                 {content === 'Menu' && <Menu />}
                 {/* {content === 'Menu' && <DemoTable/>} */}
-                {content === 'Analytics' && <DataVisualization />}
+                {content === 'Analytics' && <CategoryWiseSalesChart />}
                 {/* {content === 'Menu' && <DemoTable/>} */}
 
             </div>
