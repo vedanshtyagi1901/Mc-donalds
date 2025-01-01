@@ -171,9 +171,9 @@ function AnnualProfit() {
     }
 
     return (
-        <div className="time_series_container mx-14 p-4 text-white justify-center">
+        <div className="time_series_container p-4 text-white justify-center w-[1200px] mx-auto">
             {/* Doughnut Charts for Today, Monthly, Yearly, All-Time Earnings */}
-            <div className="donut-container">
+            <div className="donut-container ml-20">
                 <div className="flex flex-row gap-36">
                     {/* Today's Earnings */}
                     <div className="chart-container" style={{ width: '160px', height: '160px' }}>
@@ -183,13 +183,13 @@ function AnnualProfit() {
                     </div>
                     {/* Monthly Earnings */}
                     <div className="chart-container" style={{ width: '160px', height: '160px' }}>
-                        <h2 className="text-center">Monthly Earnings</h2>
+                        <h2 className="text-center">This month Earnings</h2>
                         <Doughnut data={doughnutData(calculateEarnings(reservations, bills).thisMonth)} options={{ responsive: true }} />
                         <p className="text-center mt-2">{`₹${calculateEarnings(reservations, bills).thisMonth.toLocaleString()}`}</p>
                     </div>
                     {/* Annual Earnings */}
                     <div className="chart-container" style={{ width: '160px', height: '160px' }}>
-                        <h2 className="text-center">Annual Earnings</h2>
+                        <h2 className="text-center">This year Earnings</h2>
                         <Doughnut data={doughnutData(calculateEarnings(reservations, bills).thisYear)} options={{ responsive: true }} />
                         <p className="text-center mt-2">{`₹${calculateEarnings(reservations, bills).thisYear.toLocaleString()}`}</p>
                     </div>

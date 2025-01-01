@@ -33,7 +33,7 @@ function MainSection({ menu, fetchedItems }) {
   const menuItems = {
     Burger: [
       { image: fetchedItems[0]?.image, title: fetchedItems[0]?.title || 'Burger 1', price: 300, getter: Burger1, setter: setBurger1 },
-      { image: fetchedItems[1]?.image, title: fetchedItems[0]?.title, price: fetchedItems[0]?.price, getter: Burger2, setter: setBurger2 },
+      { image: fetchedItems[1]?.image, title: fetchedItems[1]?.title, price: fetchedItems[1]?.price, getter: Burger2, setter: setBurger2 },
       { image: './various-burgers/burger3.png', title: 'Chicken Burger', price: 400, getter: Burger3, setter: setBurger3 },
       { image: './various-burgers/burger4.png', title: 'Veggie Burger', price: 250, getter: Burger4, setter: setBurger4 },
     ],

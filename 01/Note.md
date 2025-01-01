@@ -4,13 +4,6 @@ There will be no need to free a lot of spaces on mongodb atlas
 
 
 1. Sales Analytics
-Daily/Weekly/Monthly Sales Trends: Track sales over different time periods.
-Category-Wise Sales: Show total sales for each category (e.g., burgers, ice cream, cold drinks, combos).
-Item-Wise Popularity:
-Display the top-selling items in each category (e.g., most popular cold drink).
-Highlight the least popular items for optimization.
-Revenue Breakdown:
-Revenue per category.
 Revenue contribution by specific items.
 2. Customer Insights
 New vs. Returning Customers: Percentage of new customers vs. repeat customers.
